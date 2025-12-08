@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.io.File;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import java.util.AbstractMap;
@@ -118,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
         stopBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Stop();
+
+
+                pseudoStop();
             }
         });
 
@@ -195,6 +199,19 @@ public class MainActivity extends AppCompatActivity {
             exception.setText(ex.toString());
         }
     }
+    private void pseudoStop(){
+        new AlertDialog.Builder(this)
+                .setTitle("Beenden?")
+                .setMessage("Bist du dir Sicher?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Stop();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
     @SuppressLint("MissingPermission")
     private void Stop() {
         mode = MainActivity.Mode.Off;
