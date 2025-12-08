@@ -34,9 +34,18 @@ import java.io.File;
 
 import androidx.core.app.ActivityCompat;
 
+import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -71,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     android.bluetooth.le.ScanSettings settings;
     private MainActivity.ScanCallback scb;
 
-    private HashSet<String> hash;
+    private StringIntDictionary hash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         nFahrgaste.setText("0");
         nFahrgaste.setEnabled(true);
         nGerate.setText("0");
-        hash=new HashSet<String>();
+        hash = new StringIntDictionary();
         fileText = new JSONObject();
         thisStation = new JSONObject();
         filename = "SemProMess" + df.format(Calendar.getInstance().getTime());
@@ -154,7 +163,15 @@ public class MainActivity extends AppCompatActivity {
     }
     private void Haltestelle() {
         try {
-            hash.clear();
+            JSONObject macs = new JSONObject();
+            for (Iterator<Map.Entry<String, Integer>> it = hash.iterator(); it.hasNext(); ) {
+                Map.Entry i = it.next();
+                macs.put(i.getKey().toString(),i.getValue().toString());
+
+            }
+            thisStation.put("Macs",macs);
+
+            hash = new StringIntDictionary();
             list.setText("");
             nGerate.setText("0");
             thisStation.put("Fahrgaste", nFahrgaste.getText());
@@ -231,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        try{
-            if(!hash.contains(btDevice.getAddress()))
+        try{//
+            if(!hash.containsKey(btDevice.getAddress()))
+            //if(!hash.contains(btDevice.getAddress()))
             {
-                hash.add(btDevice.getAddress());
+                hash.add(btDevice.getAddress(),1);
 
                 String Text=list.getText().toString() + btDevice.getAddress()+"\n";
-
 
                 list.setText(Text);
 
@@ -247,8 +264,13 @@ public class MainActivity extends AppCompatActivity {
                 nGerate.setText(s);
 
 
-                thisStation.accumulate("MACs",btDevice.getAddress());
+                //thisStation.accumulate("MACs",btDevice.getAddress());
             }
+            else {
+                int i = hash.get(btDevice.getAddress());
+                hash.set(btDevice.getAddress(),i+1);
+            }
+
         }
         catch (Exception ex){
             exception.setText(ex.toString());
@@ -406,6 +428,196 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    public class StringIntDictionary implements Iterable<Map.Entry<String, Integer>> {
+
+        private class Entry {
+            final int hash;
+            final String key;
+            int value;
+            Entry next;
+
+            Entry(int hash, String key, int value, Entry next) {
+                this.hash = hash;
+                this.key = key;
+                this.value = value;
+                this.next = next;
+            }
+        }
+
+        private Entry[] buckets;
+        private int count;
+        private int threshold;
+        private static final float LOAD_FACTOR = 0.75f;
+
+        public StringIntDictionary() {
+            buckets = new Entry[16];
+            threshold = (int) (buckets.length * LOAD_FACTOR);
+        }
+
+        // ---------------------
+        // Internal Utilities
+        // ---------------------
+
+        private int getBucketIndex(String key) {
+            return (key.hashCode() & 0x7fffffff) % buckets.length;
+        }
+
+        private void ensureCapacity() {
+            if (count < threshold)
+                return;
+
+            int newCapacity = buckets.length * 2;
+            Entry[] newBuckets = new Entry[newCapacity];
+
+            for (Entry entry : buckets) {
+                while (entry != null) {
+                    Entry next = entry.next;
+                    int idx = (entry.hash & 0x7fffffff) % newCapacity;
+                    entry.next = newBuckets[idx];
+                    newBuckets[idx] = entry;
+                    entry = next;
+                }
+            }
+
+            buckets = newBuckets;
+            threshold = (int) (newCapacity * LOAD_FACTOR);
+        }
+
+        private Entry findEntry(String key) {
+            int hash = key.hashCode();
+            int idx = getBucketIndex(key);
+
+            Entry entry = buckets[idx];
+            while (entry != null) {
+                if (entry.hash == hash && entry.key.equals(key))
+                    return entry;
+                entry = entry.next;
+            }
+            return null;
+        }
+
+        // ---------------------
+        // Public API
+        // ---------------------
+
+        /** C# Dictionary.Add(key, value). Throws if key exists. */
+        public void add(String key, int value) {
+            Objects.requireNonNull(key);
+            ensureCapacity();
+
+            int hash = key.hashCode();
+            int idx = getBucketIndex(key);
+
+            Entry entry = buckets[idx];
+            while (entry != null) {
+                if (entry.hash == hash && entry.key.equals(key)) {
+                    throw new IllegalArgumentException("Key already exists: " + key);
+                }
+                entry = entry.next;
+            }
+
+            buckets[idx] = new Entry(hash, key, value, buckets[idx]);
+            count++;
+        }
+
+        /** Returns true if the key exists. */
+        public boolean containsKey(String key) {
+            return findEntry(key) != null;
+        }
+
+        /** C# indexer get key: dict[key] */
+        public int get(String key) {
+            Entry entry = findEntry(key);
+            if (entry == null)
+                return -1;
+            return entry.value;
+        }
+
+        /** C# indexer set key: dict[key] = value */
+        public void set(String key, int value) {
+            Objects.requireNonNull(key);
+            ensureCapacity();
+
+            int hash = key.hashCode();
+            int idx = getBucketIndex(key);
+
+            Entry entry = buckets[idx];
+            while (entry != null) {
+                if (entry.hash == hash && entry.key.equals(key)) {
+                    entry.value = value;
+                    return;
+                }
+                entry = entry.next;
+            }
+
+            // Insert new entry
+            buckets[idx] = new Entry(hash, key, value, buckets[idx]);
+            count++;
+        }
+
+
+        /** Remove key */
+        public boolean remove(String key) {
+            Objects.requireNonNull(key);
+
+            int hash = key.hashCode();
+            int idx = getBucketIndex(key);
+
+            Entry prev = null;
+            Entry curr = buckets[idx];
+
+            while (curr != null) {
+                if (curr.hash == hash && curr.key.equals(key)) {
+                    if (prev == null)
+                        buckets[idx] = curr.next;
+                    else
+                        prev.next = curr.next;
+
+                    count--;
+                    return true;
+                }
+                prev = curr;
+                curr = curr.next;
+            }
+
+            return false;
+        }
+
+        /** Number of elements */
+        public int size() {
+            return count;
+        }
+
+        // ---------------------
+        // Iterator
+        // ---------------------
+
+        @Override
+        public Iterator<Map.Entry<String, Integer>> iterator() {
+            return new Iterator<>() {
+                private int bucketIndex = 0;
+                private Entry current = null;
+
+                @Override
+                public boolean hasNext() {
+                    while (current == null && bucketIndex < buckets.length) {
+                        current = buckets[bucketIndex++];
+                    }
+                    return current != null;
+                }
+
+                @Override
+                public Map.Entry<String, Integer> next() {
+                    if (!hasNext()) throw new NoSuchElementException();
+                    Entry ret = current;
+                    current = current.next;
+                    return new AbstractMap.SimpleEntry<>(ret.key, ret.value);
+                }
+            };
+        }
+
+    }
 
 
 
