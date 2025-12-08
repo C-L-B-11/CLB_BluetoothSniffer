@@ -194,6 +194,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/SettingsTable" />
 
+            <Button
+                android:id="@+id/ArrivedAtStopBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:clickable="true"
+                android:enabled="false"
+                android:text="ANkunft an haltestelle"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/startMeasurementBT" />
+
             <TextView
                 android:id="@+id/nFahrgasteTV"
                 android:layout_width="wrap_content"
@@ -213,35 +226,13 @@
                 android:enabled="false"
                 android:hint="0"
                 android:inputType="number"
-                android:textSize="17sp"
+                android:textSize="25sp"
                 app:layout_constraintStart_toEndOf="@+id/nFahrgasteTV"
-                app:layout_constraintTop_toBottomOf="@+id/startMeasurementBT" />
-
-            <Button
-                android:id="@+id/ArrivedAtStopBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:clickable="true"
-                android:enabled="false"
-                android:text="ANkunft an haltestelle"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nFahrgasteET" />
-
-            <Button
-                android:id="@+id/stopMeasurementBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:clickable="true"
-                android:enabled="false"
-                android:text="Messung Beenden"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ArrivedAtStopBT" />
+
+
+
+
 
 
             <TextView
@@ -249,7 +240,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="Anzahl Geräte bei letztem Scan:"
+                android:text="Geräte bei letztem Scan:"
                 android:textSize="19sp"
                 app:layout_constraintBottom_toBottomOf="@+id/nGerateET"
                 app:layout_constraintStart_toStartOf="parent"
@@ -262,10 +253,48 @@
 
                 android:enabled="false"
                 android:hint="0"
+                android:text="0"
                 android:inputType="number"
-                android:textSize="17sp"
+                android:textSize="19sp"
                 app:layout_constraintStart_toEndOf="@+id/nGerateTV"
-                app:layout_constraintTop_toBottomOf="@+id/stopMeasurementBT" />
+                app:layout_constraintTop_toBottomOf="@+id/nFahrgasteET" />
+
+            <TextView
+                android:id="@+id/nHstTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="Erfasste Haltestellen:"
+                android:textSize="19sp"
+                app:layout_constraintBottom_toBottomOf="@+id/nHstET"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/nHstET" />
+
+            <EditText
+                android:id="@+id/nHstET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:enabled="false"
+                android:hint="0"
+                android:text="0"
+                android:inputType="number"
+                android:textSize="19sp"
+                app:layout_constraintStart_toEndOf="@+id/nHstTV"
+                app:layout_constraintTop_toBottomOf="@+id/nGerateET" />
+
+            <Button
+                android:id="@+id/stopMeasurementBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:clickable="true"
+                android:enabled="false"
+                android:text="Messung Beenden"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nHstET" />
 
 
             <TextView
@@ -277,7 +306,7 @@
                 android:text=""
                 android:textSize="19sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nGerateET" />
+                app:layout_constraintTop_toBottomOf="@+id/stopMeasurementBT" />
 
             <TextView
                 android:id="@+id/listTV"

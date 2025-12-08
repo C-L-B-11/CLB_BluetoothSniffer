@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     EditText directionET;
     EditText nFahrgaste;
     EditText nGerate;
+    EditText nHst;
     TextView exception;
     TextView list;
     private JSONObject fileText;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         directionET = findViewById(R.id.directionET);
         nFahrgaste = findViewById(R.id.nFahrgasteET);
         nGerate = findViewById(R.id.nGerateET);
+        nHst = findViewById(R.id.nHstET);
         exception = findViewById(R.id.exceptionTV);
         list = findViewById(R.id.listTV);
 
@@ -174,12 +176,22 @@ public class MainActivity extends AppCompatActivity {
             hash = new StringIntDictionary();
             list.setText("");
             nGerate.setText("0");
-            thisStation.put("Fahrgaste", nFahrgaste.getText());
+            String s = nFahrgaste.getText().toString();
+            thisStation.put("Fahrgaste", s);
             thisStation.put("Zeit", df.format(Calendar.getInstance().getTime()));
             fileText.accumulate("Haltestellen", thisStation);
 
             thisStation = new JSONObject();
+
+            String Text3=nHst.getText().toString();
+            int i2 = Integer.parseInt(Text3)+1;
+            String s2 = Integer.toString(i2);
+            nHst.setText(s2);
+
+
         } catch (Exception ex) {
+            Log.e(ex.getMessage().toString(),"");
+            ex.printStackTrace();
             exception.setText(ex.toString());
         }
     }
@@ -202,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         filters = null;
         settings = null;
     }
+
+
+
     private void findeBL(android.content.Context ctx) {
         BluetoothManager bm = null;
         BluetoothAdapter ba = null;
@@ -242,6 +257,9 @@ public class MainActivity extends AppCompatActivity {
     private void startScan(){
         scanner.startScan(Collections.singletonList(filters), settings, scb);
     }
+
+
+
     private void onLeScanResult(BluetoothDevice btDevice, byte[] bytes, String name) {
         if(name!="") {
             //exception.setText(name);
