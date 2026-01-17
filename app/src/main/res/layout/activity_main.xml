@@ -1,331 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.CLB_BlutoothSniffer.AppBarOverlay"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.CLB_BlutoothSniffer.PopupOverlay"
-            app:title="CLB_BluetoothSniffer" />
-
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".MainActivity">
+    <com.google.android.material.appbar.AppBarLayout android:id="@+id/appbar" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent">
+        <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="?attr/actionBarSize" android:background="#3F51B5" app:title="CLB Sniffer" app:titleTextColor="#FFFFFF"/>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TableLayout
-                android:id="@+id/SettingsTable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/lineTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Linie:"
-                        android:textSize="19sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/lineET"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-
-                        android:hint="42"
-                        android:inputType="number"
-                        android:textSize="17sp"
-                        app:layout_constraintStart_toStartOf="parent" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" app:layout_constraintTop_toBottomOf="@id/appbar" app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingBottom="30dp">
+            <LinearLayout android:id="@+id/presetLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_margin="10dp" android:weightSum="3" app:layout_constraintTop_toTopOf="parent">
+                <Button android:id="@+id/btnBus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="BUS" android:layout_margin="2dp" style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                <Button android:id="@+id/btnBahn" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="BAHN" android:layout_margin="2dp" style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                <Button android:id="@+id/btnZug" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ZUG" android:layout_margin="2dp" style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            </LinearLayout>
+            <TableLayout android:id="@+id/SettingsTable" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="15dp" app:layout_constraintTop_toBottomOf="@id/presetLayout">
+                <TableRow android:layout_marginBottom="5dp">
+                    <TextView android:text="Linie:" android:textSize="18sp" android:layout_gravity="center_vertical"/>
+                    <EditText android:id="@+id/lineET" android:hint="z.B. 62" android:inputType="text" android:textSize="17sp" android:layout_weight="1"/>
                 </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/stopTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Haltestelle:"
-                        android:textSize="19sp" />
-
-                    <EditText
-                        android:id="@+id/stopET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:hint="Postplatz"
-                        android:inputType="text"
-                        android:textSize="17sp" />
+                <TableRow android:layout_marginBottom="5dp">
+                    <TextView android:text="Start-Hst:" android:textSize="18sp" android:layout_gravity="center_vertical"/>
+                    <EditText android:id="@+id/stopET" android:hint="Postplatz" android:inputType="text" android:textSize="17sp" android:layout_weight="1"/>
                 </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/directionTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Richtung:"
-                        android:textSize="19sp" />
-
-                    <EditText
-                        android:id="@+id/directionET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:hint="Norden,Innenstadt"
-                        android:inputType="text"
-                        android:textSize="17sp" />
+                <TableRow android:layout_marginBottom="5dp">
+                    <TextView android:text="Richtung:" android:textSize="18sp" android:layout_gravity="center_vertical"/>
+                    <EditText android:id="@+id/directionET" android:hint="Leubnitz" android:inputType="text" android:textSize="17sp" android:layout_weight="1"/>
                 </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/weatherTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Wetter:"
-                        android:textSize="19sp" />
-
-                    <EditText
-                        android:id="@+id/weatherET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:hint="Klar,Regen"
-                        android:inputType="text"
-                        android:textSize="17sp" />
+                <TableRow android:layout_marginBottom="5dp">
+                    <TextView android:text="Messung:" android:textSize="18sp" android:layout_gravity="center_vertical"/>
+                    <EditText android:id="@+id/idET" android:hint="Nr. 1" android:inputType="text" android:textSize="17sp" android:layout_weight="1"/>
                 </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/idTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Messung Nr:"
-                        android:textSize="19sp" />
-
-                    <EditText
-                        android:id="@+id/idET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:hint="1"
-                        android:inputType="number"
-                        android:textSize="17sp" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/commentTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:text="Komentar:"
-                        android:textSize="19sp" />
-
-                    <EditText
-                        android:id="@+id/commentET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint=""
-                        android:inputType="text"
-                        android:textSize="17sp" />
+                <TableRow android:layout_marginBottom="5dp">
+                    <TextView android:text="Bemerkung:" android:textSize="18sp" android:layout_gravity="center_vertical"/>
+                    <EditText android:id="@+id/commentET" android:hint="Freitext..." android:inputType="text" android:textSize="17sp" android:layout_weight="1"/>
                 </TableRow>
             </TableLayout>
-
-
-            <Button
-                android:id="@+id/startMeasurementBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-
-                android:clickable="true"
-                android:enabled="true"
-                android:text="Messung Starten"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SettingsTable" />
-
-            <Button
-                android:id="@+id/ArrivedAtStopBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:clickable="true"
-                android:enabled="false"
-                android:text="ANkunft an haltestelle"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startMeasurementBT" />
-
-            <TextView
-                android:id="@+id/nFahrgasteTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="Anzahl Fahrgäste:"
-                android:textSize="19sp"
-                app:layout_constraintBottom_toBottomOf="@+id/nFahrgasteET"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/nFahrgasteET" />
-
-            <EditText
-                android:id="@+id/nFahrgasteET"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:enabled="false"
-                android:hint="0"
-                android:inputType="number"
-                android:textSize="25sp"
-                app:layout_constraintStart_toEndOf="@+id/nFahrgasteTV"
-                app:layout_constraintTop_toBottomOf="@+id/ArrivedAtStopBT" />
-
-
-
-
-
-
-            <TextView
-                android:id="@+id/nGerateTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="Geräte bei letztem Scan:"
-                android:textSize="19sp"
-                app:layout_constraintBottom_toBottomOf="@+id/nGerateET"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/nGerateET" />
-
-            <EditText
-                android:id="@+id/nGerateET"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:enabled="false"
-                android:hint="0"
-                android:text="0"
-                android:inputType="number"
-                android:textSize="19sp"
-                app:layout_constraintStart_toEndOf="@+id/nGerateTV"
-                app:layout_constraintTop_toBottomOf="@+id/nFahrgasteET" />
-
-            <TextView
-                android:id="@+id/nHstTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="Erfasste Haltestellen:"
-                android:textSize="19sp"
-                app:layout_constraintBottom_toBottomOf="@+id/nHstET"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/nHstET" />
-
-            <EditText
-                android:id="@+id/nHstET"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:enabled="false"
-                android:hint="0"
-                android:text="0"
-                android:inputType="number"
-                android:textSize="19sp"
-                app:layout_constraintStart_toEndOf="@+id/nHstTV"
-                app:layout_constraintTop_toBottomOf="@+id/nGerateET" />
-
-            <Button
-                android:id="@+id/stopMeasurementBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:clickable="true"
-                android:enabled="false"
-                android:text="Messung Beenden"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nHstET" />
-
-
-            <TextView
-                android:id="@+id/exceptionTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:text=""
-                android:textSize="19sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stopMeasurementBT" />
-
-            <TextView
-                android:id="@+id/listTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
-                android:text=""
-                android:textSize="19sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exceptionTV" />
-
-
+            <LinearLayout android:id="@+id/settingsLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="15dp" android:orientation="vertical" android:padding="12dp" app:layout_constraintTop_toBottomOf="@+id/SettingsTable">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wissenschaftliche Filter" android:textColor="#3F51B5" android:textStyle="bold" android:layout_marginBottom="10dp"/>
+                <CheckBox android:id="@+id/cbUseSpeed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Speed-Trigger (km/h): "/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                    <SeekBar android:id="@+id/sbSpeed" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="155" android:progress="15"/>
+                    <TextView android:id="@+id/lblSpeedValue" android:layout_width="40dp" android:layout_height="wrap_content" android:gravity="center" android:text="20" android:textStyle="bold"/>
+                </LinearLayout>
+                <CheckBox android:id="@+id/cbUseDuration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Messdauer (sek): " android:layout_marginTop="8dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                    <SeekBar android:id="@+id/sbDuration" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="170" android:progress="20"/>
+                    <TextView android:id="@+id/lblDurationValue" android:layout_width="40dp" android:layout_height="wrap_content" android:gravity="center" android:text="30" android:textStyle="bold"/>
+                </LinearLayout>
+                <CheckBox android:id="@+id/cbUseRSSI" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RSSI Limit (dBm): " android:layout_marginTop="8dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                    <SeekBar android:id="@+id/sbRSSI" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="60" android:progress="15"/>
+                    <TextView android:id="@+id/lblRSSIValue" android:layout_width="40dp" android:layout_height="wrap_content" android:gravity="center" android:text="-85" android:textStyle="bold"/>
+                </LinearLayout>
+                <CheckBox android:id="@+id/cbUsePings" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Min. Pings: " android:layout_marginTop="8dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                    <SeekBar android:id="@+id/sbPings" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="49" android:progress="14"/>
+                    <TextView android:id="@+id/lblPingsValue" android:layout_width="40dp" android:layout_height="wrap_content" android:gravity="center" android:text="15" android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:id="@+id/statusTV" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="15dp" android:layout_marginTop="5dp" android:background="#333F51B5" android:gravity="center" android:padding="8dp" android:text="Status: Bereit für Start" android:textColor="#3F51B5" android:textStyle="bold" app:layout_constraintTop_toBottomOf="@+id/settingsLayout"/>
+            <Button android:id="@+id/startMeasurementBT" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="15dp" android:layout_marginTop="10dp" android:text="MESSUNG STARTEN" app:layout_constraintTop_toBottomOf="@+id/statusTV"/>
+            <Button android:id="@+id/ArrivedAtStopBT" android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginHorizontal="15dp" android:enabled="false" android:text="CUT (Halt erreicht)" android:backgroundTint="#A9A9A9" app:layout_constraintTop_toBottomOf="@+id/startMeasurementBT"/>
+            <LinearLayout android:id="@+id/statsLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_margin="15dp" app:layout_constraintTop_toBottomOf="@+id/ArrivedAtStopBT">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gefundene Geräte (Brutto):" android:textSize="14sp"/>
+                <EditText android:id="@+id/nGerateET" android:layout_width="match_parent" android:layout_height="wrap_content" android:enabled="false" android:text="0" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gefilterte Geräte (Netto):" android:textSize="14sp" android:textColor="#2E7D32"/>
+                <EditText android:id="@+id/nFilteredET" android:layout_width="match_parent" android:layout_height="wrap_content" android:enabled="false" android:text="0" android:textColor="#2E7D32" android:textStyle="bold"/>
+                <TextView android:id="@+id/lblPrognose" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Prognose: 0" android:textColor="#4CAF50" android:textStyle="italic" android:paddingBottom="5dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fahrgäste (Manuell):" android:layout_marginTop="5dp"/>
+                <EditText android:id="@+id/nFahrgasteET" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Anzahl eingeben" android:inputType="number" android:enabled="false"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Abgeschlossene Schnitte:"/>
+                <EditText android:id="@+id/nHstET" android:layout_width="match_parent" android:layout_height="wrap_content" android:enabled="false" android:text="0"/>
+            </LinearLayout>
+            <Button android:id="@+id/stopMeasurementBT" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="15dp" android:enabled="false" android:text="MESSUNG BEENDEN UND SPEICHERN" app:layout_constraintTop_toBottomOf="@+id/statsLayout"/>
+            <TextView android:id="@+id/exceptionTV" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="15dp" android:textColor="#FF0000" app:layout_constraintTop_toBottomOf="@+id/stopMeasurementBT"/>
+            <TextView android:id="@+id/listTV" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="15dp" android:textSize="10sp" app:layout_constraintTop_toBottomOf="@+id/exceptionTV"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
