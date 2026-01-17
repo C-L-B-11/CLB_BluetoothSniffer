@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             //ba.getBluetoothLeScanner().startScan();
             exception.setText("I'm in!!");
             scanner = ba.getBluetoothLeScanner();
-            settings = new android.bluetooth.le.ScanSettings.Builder()
+            settings = new android.bluetooth.le.ScanSettings.Builder().setReportDelay(0)
                     .build();
             filters = new ScanFilter.Builder().build();
 
