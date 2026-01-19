@@ -35,6 +35,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -81,8 +82,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     private String filename;
+
+    private String startzeit;
     // NEU: Für die Live-Überwachung des Scanners
     private long lastPacketTimestamp = 0;
+
+
 
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
 
@@ -159,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else {
             statusTV.setText("Dauer-Messung aktiv");
         }
+
+        startzeit = new SimpleDateFormat("dd.MM.yyyy_HH:mm").format(Calendar.getInstance().getTime());
     }
 
     private void stopWindowAuto() {
@@ -194,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         nFahrgaste.requestFocus();
         nHst.setText("0");
         nFahrgaste.setText("");
+        startzeit = new SimpleDateFormat("dd.MM.yyyy_HH:mm").format(Calendar.getInstance().getTime());
 
         haltestelleBT.setBackgroundTintList(android.content.res.ColorStateList.valueOf(COLOR_PASTEL_GREEN));
 
@@ -216,9 +224,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         fileText = new JSONObject();
         try {
             fileText.put("Startzeit", new SimpleDateFormat("dd.MM.yyyy_HH:mm").format(Calendar.getInstance().getTime()));
+
             fileText.put("Linie", lineET.getText().toString());
             fileText.put("Haltestelle", stopET.getText().toString());
             fileText.put("Richtung",directionET.getText().toString());
+            fileText.put("Id",idET.getText().toString());
+
+            if(cbUseSpeed.isChecked())
+
+                    fileText.put("minSpeed",(sbSpeed.getProgress()+5));
+
+            if(cbUseDuration.isChecked())
+
+                    fileText.put("duration",(sbDuration.getProgress()+10));
+
+            if(cbUseRSSI.isChecked())
+
+                    fileText.put("rssiThreshhold",(sbRSSI.getProgress()-100));
+
+            if(cbUsePings.isChecked())
+
+                    fileText.put("minPings",(sbPings.getProgress()+1));
+
             fileText.put("Kommentar",commentET.getText().toString());
         } catch (Exception ex) { exception.setText(ex.toString()); }
         findeBL();
@@ -229,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         try {
             windowActive = false;
             JSONObject thisStation = new JSONObject();
-            JSONObject macsJson = new JSONObject();
+            JSONArray macsJson = new JSONArray();
             int netCount = 0;
 
             for (Map.Entry<String, RSSIStats> entry : bluetoothData.entrySet()) {
@@ -238,15 +265,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         (!cbUsePings.isChecked() || stats.count >= minPingsRequired)) {
                     netCount++;
                     JSONObject d = new JSONObject();
+                    d.put("mac",entry.getKey());
                     d.put("pings", stats.count);
+
                     d.put("rssi_avrg", stats.getAverage());
                     d.put("rssi_min", stats.min);
                     d.put("rssi_max", stats.max);
-                    macsJson.put(entry.getKey(), d);
+                    macsJson.put(d);
                 }
             }
 
             //thisStation.put("ID", idET.getText().toString());
+            thisStation.put("Startzeit",startzeit);
+            startzeit = new SimpleDateFormat("dd.MM.yyyy_HH:mm").format(Calendar.getInstance().getTime());
             thisStation.put("Fahrgaeste", nFahrgaste.getText().toString());
             thisStation.put("Netto", netCount);
             thisStation.put("Speed_kmh", String.format("%.2f", currentSpeedKMH));
